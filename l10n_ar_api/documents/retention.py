@@ -33,7 +33,7 @@ class RetentionProfit(object):
         Devuelve el valor a retener para la actividad de la retencion
         :param accumulated: Acumulado de pagos necesario para deducir el valor
         :param amount_to_pay: Importe a pagar sin impuestos
-        :return: Valor que se debe retener
+        :return: Base imponible y Valor que se debe retener
         """
         if not self.activity:
             raise AttributeError("Agregar actividad en la retencion antes de calcular el valor")
@@ -45,9 +45,10 @@ class RetentionProfit(object):
         if ((accumulated - minimum_no_aplicable) * self.activity.percentage / 100) >= self.activity.minimum_tax:
             accumulated = minimum_no_aplicable
 
-        value = (amount_to_pay + accumulated - minimum_no_aplicable) * (self.activity.percentage / 100)
+        base = amount_to_pay + accumulated - minimum_no_aplicable
+        value = base * (self.activity.percentage / 100)
 
         if value < self.activity.minimum_tax:
             value = 0
 
-        return value
+        return base, value
