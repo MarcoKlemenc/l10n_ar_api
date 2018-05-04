@@ -4,7 +4,7 @@ from os import path
 
 setup(
     name='l10n_ar_api',
-    version='1.1.2',
+    version='1.1.3',
     description='Libreria para localizacion Argentina',
     long_description='Libreria para localizacion Argentina',
     url='https://github.com/odoo-arg/l10n_ar_api',
