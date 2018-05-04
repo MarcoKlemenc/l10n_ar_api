@@ -1,7 +1,5 @@
-import sys
-sys.path.append("..")
-from .. import config
 from zeep import Client
+from l10n_ar_api.afip_webservices import config
 
 
 class Wsaa(object):

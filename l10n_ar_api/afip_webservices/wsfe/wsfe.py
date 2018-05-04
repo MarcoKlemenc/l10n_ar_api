@@ -153,15 +153,14 @@ class Wsfe(object):
         FECAERequest = self._set_FECAERequest(invoices, pos)
         # FECAESolicitar(Auth: ns0:FEAuthRequest, FeCAEReq: ns0:FECAERequest) ->
         # FECAESolicitarResult: ns0:FECAEResponse
-        response = Client(self.url).service.FECAESolicitar(
+        return Client(self.url).service.FECAESolicitar(
             Auth=self.auth_request,
             FeCAEReq=FECAERequest
-        )
+        ), FECAERequest
 
+    def show_error(self, response):
         if response.Errors:
             raise AfipError.parse_error(response)
-        
-        return response
 
     def get_last_number(self, pos_number, document_type_number):
         """

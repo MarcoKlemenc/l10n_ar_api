@@ -59,29 +59,29 @@ class TestWsfe:
             wsfe_test.get_last_number(0001, '092')
 
     def test_invoice_no_taxes(self, wsfe_test, invoice_test):
-        response = wsfe_test.get_cae([invoice_test], 0001)
+        response = wsfe_test.get_cae([invoice_test], 0001)[0]
         assert response.FeCabResp.Resultado == 'R'
 
     def test_invoice_invalid_tax(self, wsfe_test, invoice_test):
         invoice_test.add_iva(documents.tax.Iva(8, 2100, 10000))
-        response = wsfe_test.get_cae([invoice_test], 0001)
+        response = wsfe_test.get_cae([invoice_test], 0001)[0]
         assert response.FeCabResp.Resultado == 'R'
 
     def test_invoice(self, wsfe_test, invoice_test):
         invoice_test.add_iva(documents.tax.Iva(5, 2100.0, 10000.0))
-        response = wsfe_test.get_cae([invoice_test], 0001)
+        response = wsfe_test.get_cae([invoice_test], 0001)[0]
         assert response.FeCabResp.Resultado == 'A'
 
     def test_invoice_invalid_tribute(self, wsfe_test, invoice_test):
         invoice_test.add_iva(documents.tax.Iva(5, 2100, 10000))
         invoice_test.add_tribute(documents.tax.Tribute(76, 500, 1000, 5))
-        response = wsfe_test.get_cae([invoice_test], 0001)
+        response = wsfe_test.get_cae([invoice_test], 0001)[0]
         assert response.FeCabResp.Resultado == 'R'
 
     def test_invoice_tribute(self, wsfe_test, invoice_test):
         invoice_test.add_iva(documents.tax.Iva(5, 2100, 10000))
         invoice_test.add_tribute(documents.tax.Tribute(2, 500, 1000, 5))
-        response = wsfe_test.get_cae([invoice_test], 0001)
+        response = wsfe_test.get_cae([invoice_test], 0001)[0]
         assert response.FeCabResp.Resultado == 'A'
 
     def test_multiple_invoices_different_code(self, wsfe_test, invoice_test):
@@ -97,12 +97,12 @@ class TestWsfe:
         invoice_test.add_tribute(documents.tax.Tribute(2, 500, 1000, 5))
         new_invoice = copy.copy(invoice_test)
         new_invoice.customer_document_type="312"
-        response = wsfe_test.get_cae([invoice_test, new_invoice], 0001)
+        response = wsfe_test.get_cae([invoice_test, new_invoice], 0001)[0]
         assert response.FeCabResp.Resultado == 'P'
 
     def test_multiple_invoices(self, wsfe_test, invoice_test):
         invoice_test.add_iva(documents.tax.Iva(5, 2100, 10000))
         invoice_test.add_tribute(documents.tax.Tribute(2, 500, 1000, 5))
         new_invoice = copy.copy(invoice_test)
-        response = wsfe_test.get_cae([invoice_test, new_invoice], 0001)
+        response = wsfe_test.get_cae([invoice_test, new_invoice], 0001)[0]
         assert response.FeCabResp.Resultado == 'A'
